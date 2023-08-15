@@ -61,9 +61,7 @@ userShema.pre("save", async function (next) {
 
 userShema.method(
   "checkPassword",
-  async function (enterdPassword: string): Promise<boolean> {
-    console.log(this.password);
-    
+  async function (enterdPassword: string): Promise<boolean> {    
     return await compare(enterdPassword, this.password);
   }
 );

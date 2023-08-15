@@ -53,6 +53,7 @@ export const signupUser = catchAsync(
 
 export const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    
     const {
       email,
       password,
