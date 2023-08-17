@@ -1,7 +1,7 @@
 import { Schema, model, Document, Model } from "mongoose";
 import isEmail from "validator/lib/isEmail";
 import { compare, hash } from "bcryptjs";
-export interface IUser extends Document {
+export interface IUser extends Document<Schema.Types.ObjectId, any, any> {
   firstName: string;
   lastName: string;
   location: string;
@@ -61,7 +61,7 @@ userShema.pre("save", async function (next) {
 
 userShema.method(
   "checkPassword",
-  async function (enterdPassword: string): Promise<boolean> {    
+  async function (enterdPassword: string): Promise<boolean> {
     return await compare(enterdPassword, this.password);
   }
 );

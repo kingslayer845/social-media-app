@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { loginUser, protect, signupUser } from "../controllers/authController";
+import { createPost, getUserPosts } from "../controllers/postController";
 
 const router = Router();
 
