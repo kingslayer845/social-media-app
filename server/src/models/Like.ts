@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { IPost } from "./Post";
 import { IUser } from "./User";
 
@@ -8,8 +8,8 @@ export interface ILike extends Document {
 }
 
 const likeSchema = new Schema<ILike>({
-  user: { type: Schema.Types.ObjectId, ref: "User" },
-  post: { type: Schema.Types.ObjectId, ref: "Post" },
+  user: { type: mongoose.Types.ObjectId, ref: "User" },
+  post: { type: mongoose.Types.ObjectId, ref: "Post" },
 });
 
 const Like = model<ILike>("Like", likeSchema);

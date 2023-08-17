@@ -1,11 +1,11 @@
-import { Document, InferSchemaType, Schema, model } from "mongoose";
+import mongoose, { Document, InferSchemaType, Schema, model } from "mongoose";
 
 const postSchema = new Schema(
   {
     message: String,
     image: { type: String, required: [true, "Please provide a post image!"] },
     author: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       ref: "User",
       required: [true, "Post author id is missing"],
     },
@@ -16,13 +16,12 @@ const postSchema = new Schema(
   }
 );
 
-
 export type IPost = InferSchemaType<typeof postSchema> & Document;
 postSchema.virtual("likes", {
   ref: "Like",
   localField: "_id",
   foreignField: "post",
-  count:true
+  count: true,
 });
 
 const Post = model<IPost>("Post", postSchema);
