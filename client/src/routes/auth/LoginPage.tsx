@@ -1,13 +1,20 @@
 import { useFormik } from "formik";
 import FormInput from "../../components/FormInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { loginUser } from "../../api/endpoints/auth";
 import { LoginUserProps } from "../../types";
 import SubmitBtn from "../../components/SubmitBtn";
 export default function LoginPage() {
-  const loginMutation = useMutation((props: LoginUserProps) =>
-    loginUser(props)
+  const navigate = useNavigate();
+  const loginMutation = useMutation(
+    (props: LoginUserProps) => loginUser(props),
+    {
+      onSuccess: (data) => {
+        localStorage.setItem("jwt", data.token);
+        navigate("/");
+      },
+    }
   );
   const formik = useFormik({
     initialValues: {
@@ -18,7 +25,7 @@ export default function LoginPage() {
       loginMutation.mutate(values as LoginUserProps);
     },
   });
-  if (loginMutation.isSuccess) console.log(loginMutation.data);
+
   return (
     <section>
       <h1 className="text-center py-4 text-2xl font-bold text-blue-400 bg-white mb-6">

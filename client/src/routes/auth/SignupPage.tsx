@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import FormInput from "../../components/FormInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SignupUserProps } from "../../types";
 import { useMutation } from "react-query";
 import { signupUser } from "../../api/endpoints/auth";
@@ -19,8 +19,15 @@ export default function SignupPage() {
 }
 
 function SignupForm() {
-  const signupMutation = useMutation((props: SignupUserProps) =>
-    signupUser(props)
+  const navigate = useNavigate();
+  const signupMutation = useMutation(
+    (props: SignupUserProps) => signupUser(props),
+    {
+      onSuccess(data) {
+        localStorage.setItem("jwt", data.token);
+        navigate("/");
+      },
+    }
   );
   const formik = useFormik({
     initialValues: {
