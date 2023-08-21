@@ -65,3 +65,13 @@ export const removeFriend = catchAsync(
     });
   }
 );
+
+export const getFriendsAndRequests = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.user.id).select("friendsInfo -_id");
+    
+    res.status(200).json({
+      friendsInfo: user?.friendsInfo,
+    });
+  }
+);

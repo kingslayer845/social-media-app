@@ -11,7 +11,7 @@ export interface UserData {
   occupation: string;
   email: string;
   fullName: string;
-  avatar:string
+  avatar: string;
   id: string;
   friendsInfo: {
     friendRequestsReceived: string[];
@@ -28,7 +28,7 @@ const UserInfo: React.FC<{ userId?: string }> = ({ userId }) => {
     isLoading,
   } = useQuery<UserData>(queryKey, () => getUser(queryKey, userId));
   if (isLoading) return;
-  
+
   if (isSuccess)
     return (
       <div className="bg-white p-5 rounded-lg">

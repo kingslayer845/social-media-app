@@ -37,7 +37,7 @@ interface UserModel extends Model<IUser, {}, IUserMethods> {
   ): Promise<void>;
 }
 
-const userShema = new Schema<IUser, UserModel, IUserMethods>(
+const userSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     firstName: { type: String, required: [true, "Provide a firstName"] },
     lastName: { type: String, required: [true, "Provide a lastName"] },
@@ -86,7 +86,7 @@ const userShema = new Schema<IUser, UserModel, IUserMethods>(
     toObject: { versionKey: false, virtuals: true },
   }
 );
-userShema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   this.password = await hash(this.password, 12);
@@ -94,14 +94,14 @@ userShema.pre("save", async function (next) {
   next();
 });
 
-userShema.method(
+userSchema.method(
   "checkPassword",
   async function (enterdPassword: string): Promise<boolean> {
     return await compare(enterdPassword, this.password);
   }
 );
 
-userShema.static(
+userSchema.static(
   "sendFriendRequest",
   async function (
     this: UserModel,
@@ -153,7 +153,7 @@ userShema.static(
   }
 );
 
-userShema.static(
+userSchema.static(
   "acceptFriendRequest",
   async function (
     this: UserModel,
@@ -200,7 +200,7 @@ userShema.static(
     await FriendRequest.findByIdAndDelete(requestId);
   }
 );
-userShema.static(
+userSchema.static(
   "declineFriendRequest",
   async function (
     this: UserModel,
@@ -240,9 +240,33 @@ userShema.static(
     await FriendRequest.findByIdAndDelete(requestId);
   }
 );
-userShema.virtual("fullName").get(function (this: IUser) {
-  return this.firstName + " " + this.lastName;
-});
-const User = model<IUser, UserModel>("User", userShema);
+const populateFriendsInfoMiddleware = async function (
+  this: IUser,
+  next: () => void
+) {
+  this.populate({
+    path: "friendsInfo.friendRequestsReceived",
+    select: "sender -_id",
+    populate: {
+      path: "sender",
+      select: "email fullName firstName id avatar",
+    },
+  });
+  this.populate({
+    path: "friendsInfo.friendRequestsSent",
+    select: "receiver -_id",
+    populate: {
+      path: "receiver",
+      select: "email fullName firstName id avatar",
+    },
+  });
+  this.populate("friendsInfo.friends");
+
+  next();
+};
+
+userSchema.pre(/^find(One|ById)/, populateFriendsInfoMiddleware);
+
+const User = model<IUser, UserModel>("User", userSchema);
 
 export default User;

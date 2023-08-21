@@ -1,7 +1,8 @@
 import { BsPersonAdd } from "react-icons/bs";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { useMutation, useQueryClient } from "react-query";
-import { togglePostLike } from "../api/endpoints/posts";
+import { UserData } from "./UserInfo";
+import useLikePost from "../hooks/useLikePost";
+import useAddFriend from "../hooks/useAddFriend";
 export type PostType = {
   author: {
     id: string;
@@ -17,21 +18,21 @@ export type PostType = {
   isLiked: boolean;
 };
 
-const PostCard = ({ post }: { post: PostType }) => {
-  const queryClient = useQueryClient();
+const PostCard = ({
+  post,
+  myProfile,
+}: {
+  post: PostType;
+  myProfile: UserData | undefined;
+}) => {
+  const likeQuery = useLikePost();
+  const friendQuery = useAddFriend();
 
-  const { mutate, isLoading } = useMutation(
-    (postId: string) => togglePostLike(postId),
-    {
-      onSuccess: (data) => {
-        console.log(data);
-        
-        queryClient.invalidateQueries("posts");
-      },
-    }
-  );
   function handleLikeBtn() {
-    mutate(post.id);
+    likeQuery.mutate(post.id);
+  }
+  function handleAddFriend() {
+    friendQuery.mutate(post.author.id);
   }
   return (
     <div className="bg-white p-5 rounded-lg space-y-4">
@@ -51,16 +52,18 @@ const PostCard = ({ post }: { post: PostType }) => {
             </p>
           </div>
         </div>
-        <button>
-          <BsPersonAdd />
-        </button>
+        {myProfile?.id !== post.author.id && (
+          <button onClick={handleAddFriend}>
+            <BsPersonAdd />
+          </button>
+        )}
       </div>
       {post.message && <p className="text-sm py-3">{post.message}</p>}
       <img className="rounded-lg" src={post.image} alt="" />
       <div>
         <button
           onClick={handleLikeBtn}
-          disabled={isLoading}
+          disabled={likeQuery.isLoading}
           className="flex gap-1 items-center"
         >
           {post.isLiked ? <AiFillHeart color={"red"} /> : <AiOutlineHeart />}

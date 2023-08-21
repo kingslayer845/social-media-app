@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   acceptRequest,
   declineRequest,
+  getFriendsAndRequests,
   removeFriend,
   sendFriendRequest,
 } from "../controllers/friendRequestController";
@@ -15,4 +16,5 @@ router.post("/send-request", sendFriendRequest);
 router.post("/accept-request", acceptRequest);
 router.post("/decline-request", declineRequest);
 router.get("/user-requests");
+router.get("/friends-requests",getFriendsAndRequests)
 export default router;
