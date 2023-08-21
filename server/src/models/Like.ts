@@ -12,5 +12,6 @@ const likeSchema = new Schema<ILike>({
   post: { type: mongoose.Types.ObjectId, ref: "Post" },
 });
 
+
 const Like = model<ILike>("Like", likeSchema);
 export default Like;

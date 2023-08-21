@@ -42,6 +42,10 @@ const userShema = new Schema<IUser, UserModel, IUserMethods>(
     firstName: { type: String, required: [true, "Provide a firstName"] },
     lastName: { type: String, required: [true, "Provide a lastName"] },
     location: { type: String, required: [true, "Provide a location"] },
+    avatar: {
+      type: String,
+      default: process.env.DEFAULT_USER_AVATAR,
+    },
     occupation: String,
     email: {
       unique: true,
@@ -236,7 +240,9 @@ userShema.static(
     await FriendRequest.findByIdAndDelete(requestId);
   }
 );
-
+userShema.virtual("fullName").get(function (this: IUser) {
+  return this.firstName + " " + this.lastName;
+});
 const User = model<IUser, UserModel>("User", userShema);
 
 export default User;

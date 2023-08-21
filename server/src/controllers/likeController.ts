@@ -22,7 +22,6 @@ export const toggleLike = catchAsync(
     } else {
       await Like.create({ user: userId, post: postId });
       res.status(200).json({
-        status: "success",
         message: "added like",
       });
     }

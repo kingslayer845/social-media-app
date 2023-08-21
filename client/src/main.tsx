@@ -7,12 +7,24 @@ import ErrorPage from "./routes/root/ErrorPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import LoginPage from "./routes/auth/LoginPage";
 import SignupPage from "./routes/auth/SignupPage";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectRoute from "./components/ProtectRoute";
+import HomePage from "./routes/home/HomePage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: (
+      <ProtectRoute>
+        <Root />
+      </ProtectRoute>
+    ),
     errorElement: <ErrorPage />,
-    children: [],
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -23,8 +35,10 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
