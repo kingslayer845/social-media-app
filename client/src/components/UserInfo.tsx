@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { getUser } from "../api/endpoints/auth";
 import { CiLocationOn } from "react-icons/ci";
 import { MdBusinessCenter } from "react-icons/md";
-interface UserData {
+export interface UserData {
   _id: string;
   firstName: string;
   lastName: string;
@@ -11,6 +11,7 @@ interface UserData {
   occupation: string;
   email: string;
   fullName: string;
+  avatar:string
   id: string;
   friendsInfo: {
     friendRequestsReceived: string[];
@@ -27,11 +28,12 @@ const UserInfo: React.FC<{ userId?: string }> = ({ userId }) => {
     isLoading,
   } = useQuery<UserData>(queryKey, () => getUser(queryKey, userId));
   if (isLoading) return;
+  
   if (isSuccess)
     return (
       <div className="bg-white p-5 rounded-lg">
         <div className="flex gap-5 border-b border-gray-400 py-3">
-          <img className="rounded-full w-10 h-10" src={""} alt="" />
+          <img className="rounded-full w-10 h-10" src={user.avatar} alt="" />
           <div>
             <h5 className="font-semibold capitalize text-sm">
               {user.fullName}
