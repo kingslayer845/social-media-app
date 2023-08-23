@@ -1,12 +1,10 @@
 import { useMutation, useQueryClient } from "react-query";
-import { sendFriendRequest } from "../api/endpoints/friends";
+import { removeFriend } from "../api/endpoints/friends";
 
 export default () => {
   const queryClient = useQueryClient();
-
-  return useMutation((receiverId: string) => sendFriendRequest(receiverId), {
+  return useMutation((friendId: string) => removeFriend(friendId), {
     onSuccess: () => {
-      queryClient.invalidateQueries("friendRequests");
       queryClient.invalidateQueries("friends");
     },
   });

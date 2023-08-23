@@ -1,12 +1,11 @@
 import { useMutation, useQueryClient } from "react-query";
-import { sendFriendRequest } from "../api/endpoints/friends";
+import { declineFriendRequest } from "../api/endpoints/friends";
 
 export default () => {
   const queryClient = useQueryClient();
 
-  return useMutation((receiverId: string) => sendFriendRequest(receiverId), {
+  return useMutation((requestId: string) => declineFriendRequest(requestId), {
     onSuccess: () => {
-      queryClient.invalidateQueries("friendRequests");
       queryClient.invalidateQueries("friends");
     },
   });

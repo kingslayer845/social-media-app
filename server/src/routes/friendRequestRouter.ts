@@ -11,7 +11,7 @@ import { protect } from "../controllers/authController";
 const router = Router();
 
 router.use(protect);
-router.delete("/", removeFriend);
+router.delete("/:friendId", removeFriend);
 router.post("/send-request", sendFriendRequest);
 router.post("/accept-request", acceptRequest);
 router.post("/decline-request", declineRequest);

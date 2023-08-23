@@ -1,4 +1,4 @@
-import FriendRequestsAndFriends from "../../components/FriendRequestsAndFriends";
+import FriendRequestsAndFriends from "../../components/friend-requests/FriendRequestsAndFriends";
 import UserInfo from "../../components/UserInfo";
 import PostsContainers from "./PostsContainers";
 

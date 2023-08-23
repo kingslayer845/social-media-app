@@ -1,20 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
-  Friend,
   FriendsAndRequestsType,
   getFriendsAndRequests,
-} from "../api/endpoints/friends";
-import Avatar from "./Avatar";
+} from "../../api/endpoints/friends";
+import FriendsTap from "./FriendsTap";
+import SentRequestsTap from "./SentRequestsTap";
+import ReceivedRequestsTap from "./ReceivedRequestsTap";
+
 enum tap {
   friends,
   sentRequests,
   receivedRequests,
 }
-
 export default function FriendRequestsAndFriends() {
   const [currentTap, setCurrentTap] = useState<tap>(tap.friends);
-  const friendsQuery = useQuery("friends", getFriendsAndRequests);
+  const friendsQuery = useQuery<FriendsAndRequestsType>(
+    "friends",
+    getFriendsAndRequests
+  );
+
+  useEffect(() => {
+    setCurrentTap(tap.friends);
+  }, [friendsQuery.data]);
+
   if (friendsQuery.isLoading) return;
   if (friendsQuery.isSuccess) {
     const friendsInfo = friendsQuery.data;
@@ -28,11 +37,17 @@ export default function FriendRequestsAndFriends() {
               friendRequestsSent={friendsInfo.friendRequestsSent}
             />
           );
+        case tap.receivedRequests:
+          return (
+            <ReceivedRequestsTap
+              friendRequestsReceived={friendsInfo.friendRequestsReceived}
+            />
+          );
       }
     };
     return (
       <div className="bg-white rounded-lg p-5">
-        <ul className="flex justify-evenly">
+        <ul className="flex justify-evenly border-b pb-3">
           <li>
             <button
               className={`font-semibold  ${
@@ -72,25 +87,4 @@ export default function FriendRequestsAndFriends() {
       </div>
     );
   }
-}
-
-function FriendsTap({ friends }: { friends: Friend[] }) {
-  if (friends.length === 0)
-    return <p className="py-3">You don't have friends yet.</p>;
-  return <div></div>;
-}
-function SentRequestsTap({
-  friendRequestsSent,
-}: {
-  friendRequestsSent: any[];
-}) {
-  return (
-    <div>
-      {friendRequestsSent.map((friend) => (
-        <div>
-          <Avatar key={friend.id} friend={friend} />
-        </div>
-      ))}
-    </div>
-  );
 }

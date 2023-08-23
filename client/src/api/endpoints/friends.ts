@@ -1,20 +1,17 @@
 import API from "../API";
 export interface Friend {
+  requestId: string;
   email: string;
-  firstName: string;
+  fullName: string;
   id: string;
   avatar: string;
+  occupation: string;
 }
-interface Receiver {
-  receiver: Friend;
-}
-interface Sender {
-  sender: Friend;
-}
+
 export interface FriendsAndRequestsType {
-  friends: [];
-  friendRequestsSent: Receiver[];
-  friendRequestsReceived: Sender[];
+  friends: Friend[];
+  friendRequestsSent: Friend[];
+  friendRequestsReceived: Friend[];
 }
 export const sendFriendRequest = async (receiverId: string) => {
   const { data } = await API.post(`/friends/send-request`, { receiverId });
@@ -23,27 +20,20 @@ export const sendFriendRequest = async (receiverId: string) => {
 
 export const getFriendsAndRequests = async () => {
   const { data } = await API.get("/friends/friends-requests");
-  const friendsInfo: FriendsAndRequestsType = data.friendsInfo;
-  const modifiedFriendRequestsSent = friendsInfo.friendRequestsSent.map(
-    (request) => ({
-      email: request.receiver.email,
-      id: request.receiver.id,
-      avatar: request.receiver.avatar,
-    })
-  );
-  const modifiedFriendRequestsReceived = friendsInfo.friendRequestsReceived.map(
-    (request) => ({
-      email: request.sender.email,
-      id: request.sender.id,
-      avatar: request.sender.avatar,
-    })
-  );
-  // Create the modified friendsInfo object in the response data
-  return {
-    friends: friendsInfo.friends,
-    friendRequestsSent: modifiedFriendRequestsSent,
-    friendRequestsReceived: modifiedFriendRequestsReceived,
-  };
-
+  return data.friendsInfo;
   // Return the response data with the modified friendsInfo
+};
+
+export const acceptFriendRequest = async (requestId: string) => {
+  const { data } = await API.post(`/friends/accept-request`, { requestId });
+  return data;
+};
+export const declineFriendRequest = async (requestId: string) => {
+  const { data } = await API.post(`/friends/decline-request`, { requestId });
+  return data;
+};
+
+export const removeFriend = async (friendId: string) => {
+  const { data } = await API.delete(`/friends/${friendId}`);
+  return data;
 };

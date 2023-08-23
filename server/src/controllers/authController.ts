@@ -38,8 +38,7 @@ export const signupUser = catchAsync(
       avatar,
     } = req.body;
     const newUser = await User.create({
-      firstName,
-      lastName,
+      fullName: `${firstName} ${lastName}`,
       email,
       password,
       confirmPassword,
@@ -53,7 +52,6 @@ export const signupUser = catchAsync(
 
 export const loginUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    
     const {
       email,
       password,

@@ -1,11 +1,17 @@
-import mongoose, { Schema, model, Document, Model } from "mongoose";
+import mongoose, {
+  Schema,
+  model,
+  Document,
+  Model,
+  HydratedDocument,
+  Query,
+} from "mongoose";
 import isEmail from "validator/lib/isEmail";
 import { compare, hash } from "bcryptjs";
 import CustomError from "../utils/CustomError";
 import FriendRequest from "./FriendRequest";
 export interface IUser extends Document<mongoose.Types.ObjectId, any, any> {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   location: string;
   occupation: string;
   avatar: string;
@@ -18,11 +24,15 @@ export interface IUser extends Document<mongoose.Types.ObjectId, any, any> {
     friendRequestsReceived: mongoose.Types.ObjectId[];
   };
 }
+interface ProjectQueryHelpers {
+  populateFriendsInfo(): Query<any, IUser> & ProjectQueryHelpers;
+}
+
 interface IUserMethods {
   checkPassword(password: string): Promise<boolean>;
 }
 
-interface UserModel extends Model<IUser, {}, IUserMethods> {
+interface UserModel extends Model<IUser, ProjectQueryHelpers, IUserMethods> {
   sendFriendRequest(
     senderId: mongoose.Types.ObjectId,
     receiverId: mongoose.Types.ObjectId
@@ -39,8 +49,10 @@ interface UserModel extends Model<IUser, {}, IUserMethods> {
 
 const userSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
-    firstName: { type: String, required: [true, "Provide a firstName"] },
-    lastName: { type: String, required: [true, "Provide a lastName"] },
+    fullName: {
+      type: String,
+      required: [true, "Provide a firstName and a lastName"],
+    },
     location: { type: String, required: [true, "Provide a location"] },
     avatar: {
       type: String,
@@ -82,6 +94,28 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     },
   },
   {
+    query: {
+      populateFriendsInfo() {
+        this.populate({
+          path: "friendsInfo.friendRequestsReceived",
+          select: "sender id",
+          populate: {
+            path: "sender",
+            select: "email fullName id avatar occupation",
+          },
+        });
+        this.populate({
+          path: "friendsInfo.friendRequestsSent",
+          select: "receiver id",
+          populate: {
+            path: "receiver",
+            select: "email fullName id avatar occupation",
+          },
+        });
+        this.populate({ path: "friendsInfo.friends", select: "-friendsInfo" });
+        return this;
+      },
+    },
     toJSON: { versionKey: false, virtuals: true },
     toObject: { versionKey: false, virtuals: true },
   }
@@ -185,16 +219,14 @@ userSchema.static(
       sender.friendsInfo.friends.push(userId);
 
       receiver.friendsInfo.friendRequestsReceived =
-        receiver.friendsInfo.friendRequestsReceived.filter((r) =>
-          r.equals(requestId)
+        receiver.friendsInfo.friendRequestsReceived.filter(
+          (r) => !r.equals(requestId)
         );
       sender.friendsInfo.friendRequestsSent =
-        sender.friendsInfo.friendRequestsSent.filter((r) =>
-          r.equals(requestId)
+        sender.friendsInfo.friendRequestsSent.filter(
+          (r) => !r.equals(requestId)
         );
-
-      await receiver.save();
-      await sender.save();
+      await Promise.all([receiver.save(), sender.save()]);
     }
 
     await FriendRequest.findByIdAndDelete(requestId);
@@ -240,32 +272,6 @@ userSchema.static(
     await FriendRequest.findByIdAndDelete(requestId);
   }
 );
-const populateFriendsInfoMiddleware = async function (
-  this: IUser,
-  next: () => void
-) {
-  this.populate({
-    path: "friendsInfo.friendRequestsReceived",
-    select: "sender -_id",
-    populate: {
-      path: "sender",
-      select: "email fullName firstName id avatar",
-    },
-  });
-  this.populate({
-    path: "friendsInfo.friendRequestsSent",
-    select: "receiver -_id",
-    populate: {
-      path: "receiver",
-      select: "email fullName firstName id avatar",
-    },
-  });
-  this.populate("friendsInfo.friends");
-
-  next();
-};
-
-userSchema.pre(/^find(One|ById)/, populateFriendsInfoMiddleware);
 
 const User = model<IUser, UserModel>("User", userSchema);
 

@@ -6,12 +6,15 @@ interface IFriendRequest extends Document {
   createdAt: Date;
 }
 
-const friendRequestSchema = new Schema<IFriendRequest>({
-  sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  receiver: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  
-  createdAt: { type: Date, default: Date.now },
-});
+const friendRequestSchema = new Schema<IFriendRequest>(
+  {
+    sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    receiver: { type: Schema.Types.ObjectId, ref: "User", required: true },
+
+    createdAt: { type: Date, default: Date.now },
+  },
+  { toJSON: { virtuals: true, versionKey: false },toObject: { virtuals: true, versionKey: false } }
+);
 
 const FriendRequest = model<IFriendRequest>(
   "FriendRequest",
