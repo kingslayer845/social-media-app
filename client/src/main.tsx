@@ -10,6 +10,7 @@ import SignupPage from "./routes/auth/SignupPage";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectRoute from "./components/ProtectRoute";
 import HomePage from "./routes/home/HomePage";
+import axios from "axios";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,7 +33,21 @@ const router = createBrowserRouter([
   },
   { path: "/signup", element: <SignupPage /> },
 ]);
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      onError(error) {
+        console.log(error);
+
+        if (axios.isAxiosError(error) && error.response) {
+          if (error.response.status === 401) {
+            localStorage.removeItem("jwt");
+          }
+        }
+      },
+    },
+  },
+});
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>

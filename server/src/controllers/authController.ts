@@ -71,13 +71,13 @@ export const protect = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     let token = req.headers.authorization;
     if (!token || !token.startsWith("Bearer"))
-      throw new CustomError("Provide a valid token!", 400);
+      throw new CustomError("Provide a valid token!", 401);
     token = token.split(" ")[1];
     const decoded = (await verifyJwt(
       token,
       process.env.JWT_SECRET as string
     )) as jwt.JwtPayload;
-    if (!decoded) throw new CustomError("Provide a valid token!", 400);
+    if (!decoded) throw new CustomError("Provide a valid token!", 401);
 
     const user = await User.findById(decoded.id);
     if (!user) throw new CustomError("The token's user no longer exists", 401);
