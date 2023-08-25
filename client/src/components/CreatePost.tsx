@@ -1,7 +1,6 @@
 import { useQuery } from "react-query";
 import { getUser } from "../api/endpoints/auth";
 import { UserData } from "./UserInfo";
-import { BiImageAdd } from "react-icons/bi";
 import { useState } from "react";
 import useCreatePost from "../hooks/useCreatePost";
 export default function CreatePost() {
@@ -26,10 +25,13 @@ export default function CreatePost() {
 
     const formData = new FormData();
     formData.append("image", selectedFile);
-    formData.append("message", message); // Replace with the actual message
-    postQuery.mutate(formData);
-    setSelectedFile(null);
-    setMessage("");
+    formData.append("message", message);
+    postQuery.mutate(formData, {
+      onSuccess: () => {
+        setSelectedFile(null);
+        setMessage("");
+      },
+    });
   };
   return (
     <div className="bg-white p-5 rounded-lg">
@@ -46,16 +48,13 @@ export default function CreatePost() {
           placeholder="What is in your mind"
         />
       </div>
-      <div className="flex justify-evenly items-center mt-3">
-        <label className="text-gray-500 flex items-center gap-1 bg-gray-200 rounded-md p-2 cursor-pointer">
-          <BiImageAdd />
-          <span>Upload image</span>
-          <input
-            type="file"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-        </label>
+      <div className="flex justify-evenly items-center gap-2 mt-3">
+        <input
+          className="block w-full h-full px-1 py-1  text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none "
+          type="file"
+          onChange={handleFileChange}
+        />
+
         <button
           className={`text-white  px-4 py-1 rounded-md font-semibold ${
             selectedFile ? "bg-blue-400" : "bg-blue-200"
