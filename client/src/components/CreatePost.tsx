@@ -28,20 +28,26 @@ export default function CreatePost() {
     formData.append("image", selectedFile);
     formData.append("message", message); // Replace with the actual message
     postQuery.mutate(formData);
+    setSelectedFile(null);
+    setMessage("");
   };
   return (
     <div className="bg-white p-5 rounded-lg">
       <div className=" flex items-center gap-3">
-<img className="w-10 h-10 rounded-full" src={userQuery.data?.avatar} alt="" />
-      <textarea
-        onChange={({ target }) => setMessage(target.value)}
-        value={message}
-        className="bg-gray-200 rounded-xl px-3 py-1 resize-none w-full"
-        placeholder="What is in your mind"
+        <img
+          className="w-10 h-10 rounded-full"
+          src={userQuery.data?.avatar}
+          alt=""
         />
-        </div>
+        <textarea
+          onChange={({ target }) => setMessage(target.value)}
+          value={message}
+          className="bg-gray-200 rounded-xl px-3 py-1 resize-none w-full"
+          placeholder="What is in your mind"
+        />
+      </div>
       <div className="flex justify-evenly items-center mt-3">
-        <label className="text-gray-500 flex items-center gap-1 bg-gray-200 rounded-xl p-2 cursor-pointer">
+        <label className="text-gray-500 flex items-center gap-1 bg-gray-200 rounded-md p-2 cursor-pointer">
           <BiImageAdd />
           <span>Upload image</span>
           <input
@@ -51,8 +57,11 @@ export default function CreatePost() {
           />
         </label>
         <button
-          className="text-white bg-blue-400 px-4 py-1 rounded-md font-semibold"
+          className={`text-white  px-4 py-1 rounded-md font-semibold ${
+            selectedFile ? "bg-blue-400" : "bg-blue-200"
+          }`}
           onClick={(event) => handleUpload(event)}
+          disabled={!selectedFile}
         >
           Post
         </button>
