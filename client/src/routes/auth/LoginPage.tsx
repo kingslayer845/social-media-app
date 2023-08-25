@@ -5,13 +5,15 @@ import { useMutation } from "react-query";
 import { loginUser } from "../../api/endpoints/auth";
 import { LoginUserProps } from "../../types";
 import SubmitBtn from "../../components/SubmitBtn";
+import { useAuth } from "../../context/AuthContext";
 export default function LoginPage() {
+  const auth = useAuth();
   const navigate = useNavigate();
   const loginMutation = useMutation(
     (props: LoginUserProps) => loginUser(props),
     {
       onSuccess: (data) => {
-        localStorage.setItem("jwt", data.token);
+        auth?.login(data.token);
         navigate("/");
       },
     }

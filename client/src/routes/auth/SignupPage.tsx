@@ -5,6 +5,7 @@ import { SignupUserProps } from "../../types";
 import { useMutation } from "react-query";
 import { signupUser } from "../../api/endpoints/auth";
 import SubmitBtn from "../../components/SubmitBtn";
+import { useAuth } from "../../context/AuthContext";
 export default function SignupPage() {
   return (
     <section>
@@ -19,12 +20,13 @@ export default function SignupPage() {
 }
 
 function SignupForm() {
+  const auth = useAuth();
   const navigate = useNavigate();
   const signupMutation = useMutation(
     (props: SignupUserProps) => signupUser(props),
     {
       onSuccess(data) {
-        localStorage.setItem("jwt", data.token);
+        auth?.login(data.token);
         navigate("/");
       },
     }

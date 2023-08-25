@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export interface AuthContextType {
   token: string | null;
-  setToken: (newToken: string) => void;
+  login: (newToken: string) => void;
+  logout(): void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -15,9 +16,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() =>
     localStorage.getItem("jwt")
   );
-
+  const login = (token: string) => {
+    setToken(token);
+    localStorage.setItem("jwt", token);
+  };
+  const logout = () => {
+    setToken(null);
+    localStorage.removeItem("jwt");
+  };
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
+    <AuthContext.Provider value={{ token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

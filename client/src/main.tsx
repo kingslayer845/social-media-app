@@ -42,6 +42,7 @@ const queryClient = new QueryClient({
         if (axios.isAxiosError(error) && error.response) {
           if (error.response.status === 401) {
             localStorage.removeItem("jwt");
+            location.reload();
           }
         }
       },
