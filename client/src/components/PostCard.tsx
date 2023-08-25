@@ -59,7 +59,11 @@ const PostCard = ({
         )}
       </div>
       {post.message && <p className="text-sm py-3">{post.message}</p>}
-      <img className="rounded-lg" src={post.image} alt="post image" />
+      <img
+        className="rounded-lg w-full h-full object-cover"
+        src={post.image}
+        alt="post image"
+      />
       <div>
         <button
           onClick={handleLikeBtn}
