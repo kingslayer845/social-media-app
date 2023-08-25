@@ -18,7 +18,11 @@ interface PostModel extends Model<IPost> {
 const postSchema = new Schema<IPost, PostModel>(
   {
     message: String,
-    image: { type: String, required: [true, "Please provide a post image!"] },
+    image: {
+      type: String,
+
+      required: [true, "Please provide a post image!"],
+    },
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -42,8 +46,7 @@ postSchema.static(
   async function (this: PostModel, userId: mongoose.Types.ObjectId) {
     const posts: IPost[] = await this.find()
       .populate("likes")
-      .populate("author", "-friendsInfo")
-      
+      .populate("author", "-friendsInfo");
 
     if (posts.length === 0) return posts;
 
@@ -54,13 +57,14 @@ postSchema.static(
     if (likedPosts.length === 0) return posts;
     const likedPostIds = likedPosts.map((id) => id.toString());
     const postsWithIsLiked = posts.map((post) => ({
-      ...post.toJSON(),
+      ...post.toObject(),
       isLiked: likedPostIds.includes(post._id.toString()),
     }));
 
     return postsWithIsLiked;
   }
 );
+
 
 const Post = model<IPost, PostModel>("Post", postSchema);
 

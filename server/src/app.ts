@@ -5,11 +5,15 @@ import friendRequestRouter from "./routes/friendRequestRouter";
 import globalErrorHandler from "./controllers/errorController";
 import CustomError from "./utils/CustomError";
 import cors from "cors";
+import path from "path";
 
 const app = express();
 //middlewares
+// Serve uploaded images from the "uploads" directory
+app.use(express.static("public"));
 app.use(cors());
 app.use(express.json());
+
 //routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);

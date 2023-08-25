@@ -1,5 +1,8 @@
 import API from "../API";
-
+export const createPost = async (formData: FormData) => {
+  const { data } = await API.post("/posts", formData);
+  return data;
+};
 export const getAllPosts = async () => {
   const { data } = await API.get("/posts");
   return data.posts;
