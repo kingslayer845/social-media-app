@@ -12,7 +12,7 @@ export default function PostsContainers() {
     return (
       <div className="flex flex-col gap-5">
         {postsQuery.data.map((post) => (
-          <PostCard key={post.id} post={post} myProfile={userQuery.data} />
+          <PostCard key={post.id} post={post} userProfile={userQuery.data} />
         ))}
       </div>
     );

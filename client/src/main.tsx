@@ -11,6 +11,8 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectRoute from "./components/ProtectRoute";
 import HomePage from "./routes/home/HomePage";
 import axios from "axios";
+import MyProfile from "./routes/user-profile/MyProfile";
+import UserProfile from "./routes/user-profile/UserProfile";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: "/profile",
+        element: <MyProfile />,
+      },
+      {
+        path: "/:userId",
+        element: <UserProfile />,
       },
     ],
   },
