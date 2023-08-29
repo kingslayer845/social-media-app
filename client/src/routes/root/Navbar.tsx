@@ -2,9 +2,12 @@ import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import UserInfo from "../../components/UserInfo";
 import FriendRequestsAndFriends from "../../components/friend-requests/FriendRequestsAndFriends";
+import { useParams } from "react-router-dom";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+const params = useParams()
+console.log(params);
 
   const toggleNav = () => {
     setIsNavOpen((prev) => !prev);

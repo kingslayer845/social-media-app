@@ -3,6 +3,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { UserData } from "./UserInfo";
 import useLikePost from "../hooks/useLikePost";
 import useAddFriend from "../hooks/useAddFriend";
+import { Link } from "react-router-dom";
 export type PostType = {
   author: {
     id: string;
@@ -20,10 +21,10 @@ export type PostType = {
 
 const PostCard = ({
   post,
-  myProfile,
+  userProfile,
 }: {
   post: PostType;
-  myProfile: UserData | undefined;
+  userProfile: UserData | undefined;
 }) => {
   const likeQuery = useLikePost();
   const friendQuery = useAddFriend();
@@ -37,22 +38,28 @@ const PostCard = ({
   return (
     <div className="bg-white p-5 rounded-lg space-y-4">
       <div className="flex justify-between">
-        <div className="flex gap-4">
-          <img
-            className="w-10 h-10 rounded-full"
-            src={post.author.avatar}
-            alt=""
-          />
-          <div>
-            <h5 className="font-semibold capitalize text-sm">
-              {post.author.fullName}
-            </h5>
-            <p className="text-xs text-gray-500 font-semibold">
-              {post.author.location}
-            </p>
+        <Link
+          to={`${
+            userProfile?.id === post.author.id ? "/profile" : `/${post.author.id}`
+          }`}
+        >
+          <div className="flex gap-4">
+            <img
+              className="w-10 h-10 rounded-full"
+              src={post.author.avatar}
+              alt=""
+            />
+            <div>
+              <h5 className="font-semibold capitalize text-sm">
+                {post.author.fullName}
+              </h5>
+              <p className="text-xs text-gray-500 font-semibold">
+                {post.author.location}
+              </p>
+            </div>
           </div>
-        </div>
-        {myProfile?.id !== post.author.id && (
+        </Link>
+        {userProfile?.id !== post.author.id && (
           <button onClick={handleAddFriend}>
             <BsPersonAdd />
           </button>

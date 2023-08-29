@@ -16,12 +16,6 @@ export default (
     return res.status(401).json({ message: "Invalid token" });
   }
 
-  const err = {
-    ...error,
-    message: error.message,
-    stack: error.stack,
-    name: error.name,
-  };
 
   if (error.isOperational) {
     res.status(error.statusCode).json({
@@ -31,6 +25,7 @@ export default (
     });
   } else {
     res.status(500).json({
+      error:error.message,
       status: "error",
       message: "Something went wrong!",
     });

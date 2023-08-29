@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { getUser } from "../api/endpoints/auth";
 import { CiLocationOn } from "react-icons/ci";
 import { MdBusinessCenter } from "react-icons/md";
+import { useAuth } from "../context/AuthContext";
 export interface UserData {
   _id: string;
   firstName: string;
@@ -21,6 +22,7 @@ export interface UserData {
 }
 
 const UserInfo: React.FC<{ userId?: string }> = ({ userId }) => {
+  const { logout } = useAuth();
   const queryKey = userId ? ["userProfile", userId] : "myProfile";
   const {
     isSuccess,
@@ -33,11 +35,19 @@ const UserInfo: React.FC<{ userId?: string }> = ({ userId }) => {
     return (
       <div className="bg-white p-5 rounded-lg">
         <div className="flex gap-5 border-b border-gray-400 py-3">
-          <img className="rounded-full w-10 h-10" src={user.avatar} alt="" />
-          <div>
-            <h5 className="font-semibold capitalize text-sm">
-              {user.fullName}
-            </h5>
+          <img className="rounded-full w-10 h-10" src={user.avatar} alt="avatar" />
+          <div className="flex-1">
+            <div className="flex justify-between">
+              <h5 className="font-semibold capitalize text-sm">
+                {user.fullName}
+              </h5>
+              <button
+                onClick={logout}
+                className="text-sm font-semibold bg-red-100 rounded-lg py-1 px-2 hover:bg-red-300"
+              >
+                Logout
+              </button>
+            </div>
             <p className="text-xs text-gray-500 font-semibold">
               {user.friendsInfo.friends.length} friends
             </p>
