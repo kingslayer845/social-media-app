@@ -6,8 +6,6 @@ import { useParams } from "react-router-dom";
 
 const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-const params = useParams()
-console.log(params);
 
   const toggleNav = () => {
     setIsNavOpen((prev) => !prev);
@@ -35,6 +33,8 @@ function Drawer({
   isNavOpen: boolean;
   toggleNav(): void;
 }) {
+  const params = useParams();
+
   return (
     <div
       className={`fixed top-0 bottom-0 right-0 left-0 w-full h-full lg:hidden ${
@@ -53,8 +53,8 @@ function Drawer({
           isNavOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <UserInfo />
-        <FriendRequestsAndFriends />
+        <UserInfo userId={params.userId} />
+        {!params.userId && <FriendRequestsAndFriends />}
       </div>
     </div>
   );

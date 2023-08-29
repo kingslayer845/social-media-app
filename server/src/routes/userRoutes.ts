@@ -10,5 +10,6 @@ router.post("/login", loginUser);
 
 router.get("/profile", protect, getUserProfile);
 router.get("/profile/posts", protect, getUserPosts);
+router.get("/profile/:userId",getUserProfile)
 router.get("/:userId/posts", protect, getUserPosts);
 export default router;

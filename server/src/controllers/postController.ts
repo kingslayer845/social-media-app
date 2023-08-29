@@ -40,6 +40,7 @@ export const createUserPost = catchAsync(
 export const getUserPosts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId || req.user.id;
+
     const posts = await Post.find({ author: userId })
       .populate("likes")
       .populate("author", "-friendsInfo")

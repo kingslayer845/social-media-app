@@ -11,7 +11,7 @@ export default function MyProfile() {
 
   if (postQuery.isSuccess)
     return (
-      <section>
+      <section className="max-w-sm mx-auto space-y-5 py-5 md:max-w-lg lg:max-w-5xl lg:gap-5 lg:py-10 xl:max-w-7xl">
         <CreatePost />
         <div>
           {postQuery.data.map((post) => (
