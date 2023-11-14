@@ -46,8 +46,8 @@ export default function FriendRequestsAndFriends() {
       }
     };
     return (
-      <div className="bg-white rounded-lg p-5">
-        <ul className="flex justify-evenly border-b pb-3">
+      <div className="bg-white rounded-lg p-5 dark:bg-dark-400">
+        <ul className="flex justify-evenly border-b pb-3 dark:border-dark-100">
           <li>
             <button
               className={`font-semibold  ${

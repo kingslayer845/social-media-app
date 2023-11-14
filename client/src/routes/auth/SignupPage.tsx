@@ -9,7 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 export default function SignupPage() {
   return (
     <section>
-      <h1 className="text-center py-4 text-2xl font-bold text-blue-400 bg-white mb-6">
+      <h1 className="text-center py-4 text-2xl font-bold text-blue-400 bg-white mb-6 dark:bg-dark-400">
         Social App
       </h1>
       <div className="max-w-sm mx-auto">
@@ -49,7 +49,7 @@ function SignupForm() {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="flex flex-col gap-4 bg-white p-5 rounded-lg"
+      className="flex flex-col gap-4 bg-white p-5 rounded-lg dark:bg-dark-400"
     >
       <FormInput
         type="text"
@@ -101,7 +101,7 @@ function SignupForm() {
         value={formik.values.confirmPassword}
       />
 
-      <SubmitBtn text="REGISTER" isLoading={signupMutation.isLoading} />
+      <SubmitBtn text="REGISTER" isLoading={signupMutation.isLoading} className="dark:bg-blue-600 dark:hover:bg-blue-700" />
       <Link
         to={"/login"}
         className="text-blue-400 text-sm underline hover:text-blue-200"

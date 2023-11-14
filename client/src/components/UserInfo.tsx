@@ -33,8 +33,8 @@ const UserInfo: React.FC<{ userId?: string }> = ({ userId }) => {
 
   if (isSuccess)
     return (
-      <div className="bg-white p-5 rounded-lg">
-        <div className="flex gap-5 border-b border-gray-400 py-3">
+      <div className="bg-white p-5 rounded-lg dark:bg-dark-400 dark:text-gray-100">
+        <div className="flex gap-5 border-b border-gray-400 py-3 dark:border-dark-100">
           <img
             className="rounded-full w-10 h-10"
             src={user.avatar}
@@ -48,7 +48,7 @@ const UserInfo: React.FC<{ userId?: string }> = ({ userId }) => {
               {!userId && (
                 <button
                   onClick={logout}
-                  className="text-sm font-semibold bg-red-100 rounded-lg py-1 px-2 hover:bg-red-300"
+                  className="text-sm font-semibold bg-red-100 rounded-lg py-1 px-2 hover:bg-red-300 dark:bg-red-600 dark:hover:bg-red-800"
                 >
                   Logout
                 </button>

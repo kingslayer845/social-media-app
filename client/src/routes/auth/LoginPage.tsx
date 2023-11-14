@@ -30,13 +30,14 @@ export default function LoginPage() {
 
   return (
     <section>
-      <h1 className="text-center py-4 text-2xl font-bold text-blue-400 bg-white mb-6">
+      
+      <h1 className="text-center py-4 text-2xl font-bold text-blue-400 bg-white mb-6 dark:bg-dark-400">
         Social App
       </h1>
       <div className="max-w-sm mx-auto">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 bg-white p-5 rounded-lg"
+          className="flex flex-col gap-4 bg-white p-5 rounded-lg dark:bg-dark-400"
         >
           <FormInput
             type="email"
@@ -55,7 +56,7 @@ export default function LoginPage() {
           <SubmitBtn
             isLoading={loginMutation.isLoading}
             text="LOGIN"
-            className="bg-blue-400 hover:bg-blue-100 hover:text-blue-400 transition-colors duration-100 text-white py-2 rounded-lg "
+            className="bg-blue-400 hover:bg-blue-100 hover:text-blue-400 transition-colors duration-100 text-white py-2 rounded-lg dark:hover:bg-blue-700 dark:bg-blue-600 dark:text-white"
           />
           <Link
             to={"/signup"}

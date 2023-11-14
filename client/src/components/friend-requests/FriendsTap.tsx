@@ -9,14 +9,13 @@ export default function FriendsTap({ friends }: { friends: Friend[] }) {
   const handleRemoveBtn = (friendId: string) => {
     removeFriendQuery.mutate(friendId);
   };
-  console.log(friends);
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 dark:text-gray-200">
       {friends.map((friend) => (
         <div
           key={friend.id}
-          className="flex justify-between items-center pr-5 border-b border-gray-200 py-3"
+          className="flex justify-between items-center pr-5 border-b border-gray-200 py-3 dark:border-dark-100"
         >
           <div className=" flex gap-5">
             <img
@@ -35,7 +34,7 @@ export default function FriendsTap({ friends }: { friends: Friend[] }) {
           </div>
           <button
             onClick={() => handleRemoveBtn(friend.id)}
-            className=" bg-red-100 hover:opacity-75 text-red-500 rounded-lg px-3 py-1 font-semibold text-xs "
+            className=" bg-red-100 hover:opacity-75 text-red-500 rounded-lg px-3 py-1 font-semibold text-xs dark:text-white dark:bg-red-600 dark:hover:bg-red-800"
           >
             Remove
           </button>

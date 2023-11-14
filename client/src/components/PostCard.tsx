@@ -29,6 +29,7 @@ const PostCard = ({
   const likeQuery = useLikePost();
   const friendQuery = useAddFriend();
 
+
   function handleLikeBtn() {
     likeQuery.mutate(post.id);
   }
@@ -36,7 +37,7 @@ const PostCard = ({
     friendQuery.mutate(post.author.id);
   }
   return (
-    <div className="bg-white p-5 rounded-lg space-y-4">
+    <div className="bg-white p-5 rounded-lg space-y-4 dark:bg-dark-400 dark:text-gray-200">
       <div className="flex justify-between">
         <Link
           to={`${
@@ -53,19 +54,19 @@ const PostCard = ({
               <h5 className="font-semibold capitalize text-sm">
                 {post.author.fullName}
               </h5>
-              <p className="text-xs text-gray-500 font-semibold">
+              <p className="text-xs text-gray-500 font-semibold ">
                 {post.author.location}
               </p>
             </div>
           </div>
         </Link>
         {userProfile?.id !== post.author.id && (
-          <button onClick={handleAddFriend}>
+          <button onClick={handleAddFriend} disabled={userProfile?.friendsInfo.friends.includes(post.author.id)}>
             <BsPersonAdd />
           </button>
         )}
       </div>
-      {post.message && <p className="text-sm py-3">{post.message}</p>}
+      {post.message && <p className=" py-3">{post.message}</p>}
       <img
         className="rounded-lg w-full h-full object-cover"
         src={post.image}

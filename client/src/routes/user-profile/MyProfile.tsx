@@ -13,7 +13,7 @@ export default function MyProfile() {
     return (
       <section className="max-w-sm mx-auto space-y-5 py-5 md:max-w-lg lg:max-w-5xl lg:gap-5 lg:py-10 xl:max-w-7xl">
         <CreatePost />
-        <div>
+        <div className="flex flex-col gap-5">
           {postQuery.data.map((post) => (
             <PostCard key={post.id} post={post} userProfile={userQuery.data} />
           ))}
