@@ -29,7 +29,6 @@ const PostCard = ({
   const likeQuery = useLikePost();
   const friendQuery = useAddFriend();
 
-
   function handleLikeBtn() {
     likeQuery.mutate(post.id);
   }
@@ -41,7 +40,9 @@ const PostCard = ({
       <div className="flex justify-between">
         <Link
           to={`${
-            userProfile?.id === post.author.id ? "/profile" : `/${post.author.id}`
+            userProfile?.id === post.author.id
+              ? "/profile"
+              : `/${post.author.id}`
           }`}
         >
           <div className="flex gap-4">
@@ -54,24 +55,29 @@ const PostCard = ({
               <h5 className="font-semibold capitalize text-sm">
                 {post.author.fullName}
               </h5>
-              <p className="text-xs text-gray-500 font-semibold ">
+              <p className="text-xs text-gray-500 font-semibold dark:text-dark-100">
                 {post.author.location}
               </p>
             </div>
           </div>
         </Link>
         {userProfile?.id !== post.author.id && (
-          <button onClick={handleAddFriend} disabled={userProfile?.friendsInfo.friends.includes(post.author.id)}>
+          <button
+            onClick={handleAddFriend}
+            disabled={userProfile?.friendsInfo.friends.includes(post.author.id)}
+          >
             <BsPersonAdd />
           </button>
         )}
       </div>
       {post.message && <p className=" py-3">{post.message}</p>}
-      <img
-        className="rounded-lg w-full h-full object-cover"
-        src={post.image}
-        alt="post image"
-      />
+      <div>
+        <img
+          className="rounded-lg w-full h-full object-cover"
+          src={post.image}
+          alt="post image"
+        />
+      </div>
       <div>
         <button
           onClick={handleLikeBtn}
